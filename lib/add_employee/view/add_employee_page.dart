@@ -1,9 +1,9 @@
 import 'package:dev_assignment_2/common/cancel_button.dart';
-import 'package:dev_assignment_2/common/drop_down_text_field.dart';
 import 'package:dev_assignment_2/common/save_button.dart';
 import 'package:dev_assignment_2/common/text_field.dart';
 import 'package:dev_assignment_2/employee_list/cubit/employee_list_cubit.dart';
 import 'package:dev_assignment_2/l10n/l10n.dart';
+import 'package:dev_assignment_2/utils/app_colors.dart';
 import 'package:dev_assignment_2/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,26 +43,77 @@ class AddEmployeeView extends StatelessWidget {
             SizedBox(
               height: context.screenHeight * 0.02483801295,
             ),
-            DropDownTextField(
-              items: const [
-                DropdownMenuItem<String>(
-                  value: 'Flutter Developer',
-                  child: Text('Flutter Developer'),
-                ),
-              ],
+            DefaultTextField(
               hint: context.l10n.selectRoleHint,
+              controller: cubit.nameController,
+              readOnly: true,
+              onTapped: () {
+                showModalBottomSheet<String>(
+                  context: context,
+                  backgroundColor: AppColors.appWhite,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                  ),
+                  builder: (_) => BottomSheet(
+                    cubit: cubit,
+                  ),
+                );
+              },
             ),
             SizedBox(
               height: context.screenHeight * 0.02483801295,
             ),
-            DefaultTextField(
-              controller: cubit.nameController,
-              hint: context.l10n.employeeNameHint,
+            Row(
+              children: [
+                Expanded(
+                  child: DefaultTextField(
+                    controller: cubit.nameController,
+                    hint: context.l10n.noDateHint,
+                    readOnly: true,
+                    onTapped: () {},
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(
+                    Icons.east,
+                    size: 20,
+                    color: AppColors.appMainColor,
+                  ),
+                ),
+                Expanded(
+                  child: DefaultTextField(
+                    controller: cubit.nameController,
+                    hint: context.l10n.noDateHint,
+                    readOnly: true,
+                    onTapped: () {},
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
       bottomNavigationBar: const BottomActions(),
+    );
+  }
+}
+
+class BottomSheet extends StatelessWidget {
+  const BottomSheet({required this.cubit, super.key});
+  final EmployeeListCubit cubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      shrinkWrap: true,
+      itemCount: cubit.roles.length,
+      separatorBuilder: (context, index) => const Divider(),
+      itemBuilder: (context, index) => Center(child: Text(cubit.roles[index])),
     );
   }
 }

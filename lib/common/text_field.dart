@@ -6,10 +6,16 @@ class DefaultTextField extends StatelessWidget {
   const DefaultTextField({
     required this.controller,
     required this.hint,
+    this.readOnly,
     super.key,
+    this.trailing,
+    this.onTapped,
   });
   final TextEditingController controller;
   final String hint;
+  final Widget? trailing;
+  final void Function()? onTapped;
+  final bool? readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +36,8 @@ class DefaultTextField extends StatelessWidget {
           ),
           Expanded(
             child: TextFormField(
+              onTap: onTapped,
+              readOnly: readOnly ?? false,
               controller: controller,
               decoration: InputDecoration.collapsed(
                 hintStyle: const TextStyle(
@@ -41,6 +49,12 @@ class DefaultTextField extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(
+            width: context.screenWidth * 0.02803738317,
+          ),
+          if (trailing != null) ...[
+            trailing!,
+          ],
         ],
       ),
     );

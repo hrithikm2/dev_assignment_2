@@ -9,6 +9,13 @@ class EmployeeListCubit extends Cubit<EmployeeListState> {
 
   late TextEditingController nameController;
 
+  List<String> roles = [
+    'Product Designer',
+    'Flutter Developer',
+    'QA Tester',
+    'Product Owner',
+  ];
+
   @override
   Future<void> close() {
     nameController.dispose();

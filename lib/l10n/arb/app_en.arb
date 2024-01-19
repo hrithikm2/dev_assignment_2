@@ -23,5 +23,9 @@
   "selectRoleHint": "Select Role",
   "@selectRoleHint": {
     "description": "Hint Text of Select Role Text Field"
+  },
+  "noDateHint": "No Date",
+  "@noDateHint": {
+    "description": "Hint Text of Start Date Text Field"
   }
 }
