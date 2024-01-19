@@ -3,10 +3,12 @@ import 'package:dev_assignment_2/common/save_button.dart';
 import 'package:dev_assignment_2/common/text_field.dart';
 import 'package:dev_assignment_2/employee_list/cubit/employee_list_cubit.dart';
 import 'package:dev_assignment_2/l10n/l10n.dart';
+import 'package:dev_assignment_2/utils/app_assets.dart';
 import 'package:dev_assignment_2/utils/app_colors.dart';
 import 'package:dev_assignment_2/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AddEmployeePage extends StatelessWidget {
   const AddEmployeePage({super.key});
@@ -36,15 +38,26 @@ class AddEmployeeView extends StatelessWidget {
         padding: EdgeInsets.all(context.screenWidth * 0.03738317757),
         child: Column(
           children: [
+            //Name
             DefaultTextField(
               controller: cubit.nameController,
+              icon: const Icon(
+                Icons.person_outline,
+                color: AppColors.appMainColor,
+              ),
               hint: context.l10n.employeeNameHint,
             ),
             SizedBox(
               height: context.screenHeight * 0.02483801295,
             ),
+
+            //Role
             DefaultTextField(
               hint: context.l10n.selectRoleHint,
+              icon: const Icon(
+                Icons.work_outline,
+                color: AppColors.appMainColor,
+              ),
               controller: cubit.nameController,
               readOnly: true,
               onTapped: () {
@@ -66,11 +79,16 @@ class AddEmployeeView extends StatelessWidget {
             SizedBox(
               height: context.screenHeight * 0.02483801295,
             ),
+
+            //Dates
             Row(
               children: [
                 Expanded(
                   child: DefaultTextField(
                     controller: cubit.nameController,
+                    icon: SvgPicture.asset(
+                      AppAssets.calendarIcon,
+                    ),
                     hint: context.l10n.noDateHint,
                     readOnly: true,
                     onTapped: () {},
@@ -87,9 +105,14 @@ class AddEmployeeView extends StatelessWidget {
                 Expanded(
                   child: DefaultTextField(
                     controller: cubit.nameController,
+                    icon: SvgPicture.asset(
+                      AppAssets.calendarIcon,
+                    ),
                     hint: context.l10n.noDateHint,
                     readOnly: true,
-                    onTapped: () {},
+                    onTapped: () {
+                      print('OPEN CUSTOM DATE PICKER HERE');
+                    },
                   ),
                 ),
               ],

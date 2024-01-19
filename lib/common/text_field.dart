@@ -10,9 +10,11 @@ class DefaultTextField extends StatelessWidget {
     super.key,
     this.trailing,
     this.onTapped,
+    this.icon,
   });
   final TextEditingController controller;
   final String hint;
+  final Widget? icon;
   final Widget? trailing;
   final void Function()? onTapped;
   final bool? readOnly;
@@ -27,10 +29,9 @@ class DefaultTextField extends StatelessWidget {
       padding: EdgeInsets.all(context.screenWidth * 0.01869158878),
       child: Row(
         children: [
-          const Icon(
-            Icons.person_outline,
-            color: AppColors.appMainColor,
-          ),
+          if (icon != null) ...[
+            icon!,
+          ],
           SizedBox(
             width: context.screenWidth * 0.02803738317,
           ),
