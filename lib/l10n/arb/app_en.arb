@@ -1,0 +1,27 @@
+{
+  "@@locale": "en",
+  "employeeListAppBarTitle": "Employee List",
+  "@counterAppBarTitle": {
+    "description": "Text shown in the AppBar of the Employee List Page"
+  },
+  "addEmployeeAppBarTitle": "Add Employee",
+  "@addEmployeeAppBarTitlee": {
+    "description": "Text shown in the AppBar of the Add Employee Page"
+  },
+  "cancelButtonText": "Cancel",
+  "@cancelButtonText": {
+    "description": "Label of Cancel Button"
+  },
+  "saveButtonText": "Save",
+  "@saveButtonText": {
+    "description": "Label of Save Button"
+  },
+  "employeeNameHint": "Employee Name",
+  "@employeeNameHint": {
+    "description": "Hint Text of Employee Name Text Field"
+  },
+  "selectRoleHint": "Select Role",
+  "@selectRoleHint": {
+    "description": "Hint Text of Select Role Text Field"
+  }
+}
