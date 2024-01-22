@@ -1,8 +1,13 @@
 part of '../add_employee_page.dart';
 
 class DatePickerDialog extends StatelessWidget {
-  const DatePickerDialog({required this.cubit, super.key});
+  const DatePickerDialog({
+    required this.cubit,
+    required this.options,
+    super.key,
+  });
   final AddEmployeeCubit cubit;
+  final List<(DateOption, String)> options;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +36,9 @@ class DatePickerDialog extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.03738317757,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    spacing: context.screenWidth * 0.03738317757,
                     children: [
                       DateChoice(
                         label: 'Today',
@@ -41,7 +47,7 @@ class DatePickerDialog extends StatelessWidget {
                             cubit.onChoiceChipTapped(val, DateOption.today),
                       ),
                       DateChoice(
-                        label: 'Next Monday',
+                        label: 'Hi',
                         isSelected: cubit.value == DateOption.nextMonday,
                         onSelected: (val) => cubit.onChoiceChipTapped(
                           val,

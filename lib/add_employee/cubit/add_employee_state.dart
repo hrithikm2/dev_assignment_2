@@ -22,3 +22,8 @@ class DateChanged extends AddEmployeeState {
 class DateSelected extends AddEmployeeState {
   const DateSelected();
 }
+
+class AddEmployeeSuccess extends AddEmployeeState {
+  @override
+  List<Object?> get props => [];
+}

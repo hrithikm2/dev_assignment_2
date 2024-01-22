@@ -24,8 +24,24 @@
   "@selectRoleHint": {
     "description": "Hint Text of Select Role Text Field"
   },
-  "noDateHint": "No Date",
-  "@noDateHint": {
+  "noDate": "No Date",
+  "@noDate": {
     "description": "Hint Text of Start Date Text Field"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Today"
+  },
+  "nextMonday": "Next Monday",
+  "@nextMonday": {
+    "description": "Next Monday"
+  },
+  "nextTuesday": "Next Tuesday",
+  "@nextTuesday": {
+    "description": "Next Tuesday"
+  },
+  "afterOneWeek": "After 1 Week",
+  "@afterOneWeek": {
+    "description": "After 1 Week"
   }
 }

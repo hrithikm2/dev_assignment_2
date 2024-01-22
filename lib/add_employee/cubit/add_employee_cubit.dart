@@ -1,14 +1,15 @@
 // ignore_for_file: avoid_positional_boolean_parameters
 
 import 'package:bloc/bloc.dart';
+import 'package:dev_assignment_2/database/database.dart';
+import 'package:dev_assignment_2/models/employee_model.dart';
+import 'package:dev_assignment_2/utils/app_enums.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 part 'add_employee_state.dart';
-
-enum DateOption { noDate, today, nextMonday, nextTuesday, afterOneWeek }
 
 class AddEmployeeCubit extends Cubit<AddEmployeeState> {
   AddEmployeeCubit() : super(AddEmployeeInitial()) {
@@ -95,5 +96,24 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     _formatDate();
     controller.text = formattedDate;
     emit(const DateSelected());
+  }
+
+  Future<void> saveEmployeeDataToDb(bool isEdit) async {
+    final data = {
+      'name': nameController.text,
+      'role': roleController.text,
+      'startDate': startDateController.text,
+      'endDate': endDateController.text,
+      'isPrevious':
+          DateTime.parse(endDateController.text).isBefore(DateTime.now()),
+    };
+    if (isEdit) {
+      await SqfliteDatabase.updateDataInDatabase(
+        EmployeeModel.fromJson(data),
+      ).then((value) => emit(AddEmployeeSuccess()));
+    } else {
+      await SqfliteDatabase.insertData(EmployeeModel.fromJson(data))
+          .then((value) => emit(AddEmployeeSuccess()));
+    }
   }
 }
