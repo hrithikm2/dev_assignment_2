@@ -10,15 +10,15 @@ class SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      color: AppColors.appMainColor,
+      color: AppColors.mainColor,
       height: context.screenHeight * 0.043,
       minWidth: context.screenWidth * 0.17,
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      onPressed: () {},
+      onPressed: onPressed,
       child: Text(
         context.l10n.saveButtonText,
-        style: const TextStyle(color: AppColors.appWhite),
+        style: const TextStyle(color: AppColors.white),
       ),
     );
   }

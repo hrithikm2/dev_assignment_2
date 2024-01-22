@@ -18,7 +18,7 @@ class CancelButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         context.l10n.cancelButtonText,
-        style: const TextStyle(color: AppColors.appMainColor),
+        style: const TextStyle(color: AppColors.mainColor),
       ),
     );
   }

@@ -20,7 +20,7 @@ class DropDownTextField extends StatelessWidget {
         children: [
           const Icon(
             Icons.work_outline,
-            color: AppColors.appMainColor,
+            color: AppColors.mainColor,
           ),
           SizedBox(
             width: context.screenWidth * 0.02803738317,
@@ -44,7 +44,7 @@ class DropDownTextField extends StatelessWidget {
               iconStyleData: const IconStyleData(
                 icon: Icon(
                   Icons.arrow_drop_down,
-                  color: AppColors.appMainColor,
+                  color: AppColors.mainColor,
                 ),
               ),
               decoration: InputDecoration.collapsed(

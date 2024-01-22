@@ -37,7 +37,7 @@ class EmployeeListView extends StatelessWidget {
         ),
         child: const Icon(
           Icons.add,
-          color: AppColors.appWhite,
+          color: AppColors.white,
         ),
       ),
     );
