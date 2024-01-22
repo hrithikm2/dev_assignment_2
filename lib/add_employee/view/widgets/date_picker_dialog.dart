@@ -39,48 +39,15 @@ class DatePickerDialog extends StatelessWidget {
                   child: Wrap(
                     alignment: WrapAlignment.spaceBetween,
                     spacing: context.screenWidth * 0.03738317757,
-                    children: [
-                      DateChoice(
-                        label: 'Today',
-                        isSelected: cubit.value == DateOption.today,
+                    children: List.generate(
+                      options.length,
+                      (index) => DateChoice(
+                        label: options[index].$2,
+                        isSelected: cubit.value == options[index].$1,
                         onSelected: (val) =>
-                            cubit.onChoiceChipTapped(val, DateOption.today),
+                            cubit.onChoiceChipTapped(val, options[index].$1),
                       ),
-                      DateChoice(
-                        label: 'Hi',
-                        isSelected: cubit.value == DateOption.nextMonday,
-                        onSelected: (val) => cubit.onChoiceChipTapped(
-                          val,
-                          DateOption.nextMonday,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: context.screenWidth * 0.03738317757,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      DateChoice(
-                        label: 'Next Tuesday',
-                        isSelected: cubit.value == DateOption.nextTuesday,
-                        onSelected: (val) => cubit.onChoiceChipTapped(
-                          val,
-                          DateOption.nextTuesday,
-                        ),
-                      ),
-                      DateChoice(
-                        label: 'After 1 week',
-                        isSelected: cubit.value == DateOption.afterOneWeek,
-                        onSelected: (val) => cubit.onChoiceChipTapped(
-                          val,
-                          DateOption.afterOneWeek,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 TableCalendar<dynamic>(
