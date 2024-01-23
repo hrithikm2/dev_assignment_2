@@ -17,14 +17,19 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     roleController = TextEditingController();
     startDateController = TextEditingController();
     endDateController = TextEditingController();
+
+    focusedDay = DateTime.now();
   }
+
+  late EmployeeModel employee;
   late TextEditingController nameController;
   late TextEditingController roleController;
   late TextEditingController startDateController;
   late TextEditingController endDateController;
 
-  DateTime? selectedDay = DateTime.now();
-  DateTime focusedDay = DateTime.now();
+  DateTime? selectedStartDate;
+  late DateTime? selectedEndDate; //End Date will be after selectedStartDate
+  late DateTime focusedDay;
   String formattedDate = DateFormat('dd MMM yyyy').format(DateTime.now());
 
   CalendarFormat calendarFormat = CalendarFormat.month;
@@ -47,31 +52,63 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     return super.close();
   }
 
-  void onDaySelected(DateTime selected, DateTime focused) {
-    if (!isSameDay(selectedDay, selected)) {
-      selectedDay = selected;
+  bool selectedDatePredicate(DateTime day, DateTime? selectionDate) {
+    emit(DateChanged(date: selectionDate));
+    print(isSameDay(selectionDate, day));
+    return isSameDay(selectionDate, day);
+  }
+
+  void onStartDateSelected(DateTime selected, DateTime focused) {
+    if (!isSameDay(selectedStartDate, selected)) {
+      selectedStartDate = selected;
+      focusedDay = focused.add(const Duration(days: 1));
+      print(focused);
+    }
+    _formatDate(selectedStartDate);
+    selectedEndDate = selectedStartDate;
+    emit(DateChanged(date: selectedStartDate));
+  }
+
+  void onDatePickerTapped({required bool isValid, required bool isStart}) {
+    emit(RequestedDatePicker(isValid: isValid, isStart: isStart));
+  }
+
+  void onEndDateSelected(DateTime selected, DateTime focused) {
+    if (!isSameDay(selectedEndDate, selected)) {
+      selectedEndDate = selected;
       focusedDay = focused;
     }
-    _formatDate();
-    emit(DateChanged(date: selectedDay));
+    _formatDate(selectedEndDate);
+
+    emit(DateChanged(date: selectedEndDate));
   }
 
   // ignore: inference_failure_on_function_return_type, always_declare_return_types
-  void onChoiceChipTapped(bool selected, DateOption selectedValue) {
+  void onChoiceChipTapped(
+    bool selected,
+    DateOption selectedValue,
+    bool isStart,
+  ) {
     value = selectedValue;
+    DateTime? selectedDate;
     switch (selectedValue) {
       case DateOption.today:
-        selectedDay = DateTime.now();
+        selectedDate = DateTime.now();
       case DateOption.nextMonday:
-        selectedDay = calculateNextDay(dayCount: 1);
+        selectedDate = calculateNextDay(dayCount: 1);
       case DateOption.nextTuesday:
-        selectedDay = calculateNextDay(dayCount: 2);
+        selectedDate = calculateNextDay(dayCount: 2);
       case DateOption.afterOneWeek:
-        selectedDay = calculateNextDay(dayCount: 7);
+        selectedStartDate = calculateNextDay(dayCount: 7);
       case DateOption.noDate:
-        selectedDay = null;
+        selectedDate = null;
     }
-    emit(DateChanged(date: selectedDay));
+    if (isStart) {
+      selectedStartDate = selectedDate;
+    } else {
+      selectedEndDate = selectedDate;
+    }
+    emit(DateChanged(date: selectedDate));
   }
 
   ///[dayCount] variable decides on what day of week to jump to.
@@ -86,34 +123,43 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     return nextMonday;
   }
 
-  void _formatDate() {
-    if (selectedDay != null) {
-      formattedDate = DateFormat('dd MMM yyyy').format(selectedDay!);
+  void _formatDate(DateTime? selectionDate) {
+    if (selectionDate != null) {
+      formattedDate = DateFormat('dd MMM yyyy').format(selectionDate);
+    } else {
+      formattedDate = 'N.A.';
     }
   }
 
-  void saveDate(TextEditingController controller) {
-    _formatDate();
+  void saveDate(TextEditingController controller, DateTime? selectionDate) {
+    _formatDate(selectionDate);
     controller.text = formattedDate;
     emit(const DateSelected());
   }
 
   Future<void> saveEmployeeDataToDb(bool isEdit) async {
-    final data = {
-      'name': nameController.text,
-      'role': roleController.text,
-      'startDate': startDateController.text,
-      'endDate': endDateController.text,
-      'isPrevious':
-          DateTime.parse(endDateController.text).isBefore(DateTime.now()),
-    };
-    if (isEdit) {
-      await SqfliteDatabase.updateDataInDatabase(
-        EmployeeModel.fromJson(data),
-      ).then((value) => emit(AddEmployeeSuccess()));
+    if (nameController.text.isNotEmpty &&
+        roleController.text.isNotEmpty &&
+        endDateController.text.isNotEmpty &&
+        startDateController.text.isNotEmpty) {
+      final data = {
+        'name': nameController.text,
+        'role': roleController.text,
+        'startDate': startDateController.text,
+        'endDate': endDateController.text,
+        'isPrevious': selectedEndDate == null ? 1 : 0,
+      };
+      employee = EmployeeModel.fromJson(data);
+      if (isEdit) {
+        await SqfliteDatabase.updateDataInDatabase(
+          employee,
+        ).then((value) => emit(const AddEmployeeSuccess()));
+      } else {
+        await SqfliteDatabase.insertData(employee)
+            .then((value) => emit(const AddEmployeeSuccess()));
+      }
     } else {
-      await SqfliteDatabase.insertData(EmployeeModel.fromJson(data))
-          .then((value) => emit(AddEmployeeSuccess()));
+      emit(const AddEmployeeInvalid());
     }
   }
 }

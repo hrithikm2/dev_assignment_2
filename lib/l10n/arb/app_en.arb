@@ -43,5 +43,13 @@
   "afterOneWeek": "After 1 Week",
   "@afterOneWeek": {
     "description": "After 1 Week"
+  },
+  "selectDateAlert": "Please select start date first",
+  "@selectDateAlert": {
+    "description": "Alert given to user to select start date first"
+  },
+  "fillAllFieldsAlert": "Please select all fields",
+  "@fillAllFieldsAlert": {
+    "description": "Please select all fields"
   }
 }

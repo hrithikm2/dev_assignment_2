@@ -14,8 +14,15 @@ class App extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: BlocProvider(
-        create: (context) => AddEmployeeCubit(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AddEmployeeCubit(),
+          ),
+          BlocProvider(
+            create: (context) => EmployeeListCubit(),
+          ),
+        ],
         child: MaterialApp(
           color: AppColors.mainColor,
           debugShowCheckedModeBanner: false,

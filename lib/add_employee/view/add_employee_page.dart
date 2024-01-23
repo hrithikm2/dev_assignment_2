@@ -3,10 +3,12 @@ import 'package:dev_assignment_2/common/cancel_button.dart';
 import 'package:dev_assignment_2/common/date_choice.dart';
 import 'package:dev_assignment_2/common/save_button.dart';
 import 'package:dev_assignment_2/common/text_field.dart';
+import 'package:dev_assignment_2/employee_list/cubit/employee_list_cubit.dart';
 import 'package:dev_assignment_2/l10n/l10n.dart';
 import 'package:dev_assignment_2/utils/app_assets.dart';
 import 'package:dev_assignment_2/utils/app_colors.dart';
 import 'package:dev_assignment_2/utils/app_enums.dart';
+import 'package:dev_assignment_2/utils/common_functions.dart';
 import 'package:dev_assignment_2/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +51,61 @@ class AddEmployeeView extends StatelessWidget {
               ]
             : null,
       ),
-      body: BlocBuilder<AddEmployeeCubit, AddEmployeeState>(
+      body: BlocConsumer<AddEmployeeCubit, AddEmployeeState>(
+        listener: (context, state) {
+          if (state is RequestedDatePicker) {
+            if (state.isValid) {
+              if (state.isStart) {
+                showDialog<dynamic>(
+                  context: context,
+                  builder: (_) => DatePickerDialog(
+                    cubit: cubit,
+                    isStart: true,
+                    options: [
+                      (DateOption.today, context.l10n.today),
+                      (DateOption.nextMonday, context.l10n.nextMonday),
+                      (DateOption.nextTuesday, context.l10n.nextTuesday),
+                      (DateOption.afterOneWeek, context.l10n.afterOneWeek),
+                    ],
+                    onSaved: () => cubit.saveDate(
+                      cubit.startDateController,
+                      cubit.selectedStartDate,
+                    ),
+                  ),
+                );
+              } else {
+                showDialog<dynamic>(
+                  context: context,
+                  builder: (_) => DatePickerDialog(
+                    isStart: false,
+                    cubit: cubit,
+                    options: [
+                      (DateOption.noDate, context.l10n.noDate),
+                      (DateOption.today, context.l10n.today),
+                    ],
+                    onSaved: () => cubit.saveDate(
+                      cubit.endDateController,
+                      cubit.selectedEndDate,
+                    ),
+                  ),
+                );
+              }
+            } else {
+              CommonFunctions.showSnackbar(
+                context,
+                context.l10n.selectDateAlert,
+              );
+            }
+          } else if (state is AddEmployeeInvalid) {
+            CommonFunctions.showSnackbar(
+              context,
+              context.l10n.fillAllFieldsAlert,
+            );
+          } else if (state is AddEmployeeSuccess) {
+            context.read<EmployeeListCubit>().employees.add(cubit.employee);
+            context.pop;
+          }
+        },
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(context.screenWidth * 0.03738317757),
@@ -75,7 +131,7 @@ class AddEmployeeView extends StatelessWidget {
                     Icons.work_outline,
                     color: AppColors.mainColor,
                   ),
-                  controller: cubit.nameController,
+                  controller: cubit.roleController,
                   readOnly: true,
                   onTapped: () => showModalBottomSheet<String>(
                     context: context,
@@ -106,23 +162,9 @@ class AddEmployeeView extends StatelessWidget {
                         ),
                         hint: context.l10n.noDate,
                         readOnly: true,
-                        onTapped: () => showDialog<dynamic>(
-                          context: context,
-                          builder: (_) => DatePickerDialog(
-                            cubit: cubit,
-                            options: [
-                              (DateOption.today, context.l10n.today),
-                              (DateOption.nextMonday, context.l10n.nextMonday),
-                              (
-                                DateOption.nextTuesday,
-                                context.l10n.nextTuesday
-                              ),
-                              (
-                                DateOption.afterOneWeek,
-                                context.l10n.afterOneWeek
-                              ),
-                            ],
-                          ),
+                        onTapped: () => cubit.onDatePickerTapped(
+                          isValid: true,
+                          isStart: true,
                         ),
                       ),
                     ),
@@ -142,15 +184,9 @@ class AddEmployeeView extends StatelessWidget {
                         ),
                         hint: context.l10n.noDate,
                         readOnly: true,
-                        onTapped: () => showDialog<dynamic>(
-                          context: context,
-                          builder: (_) => DatePickerDialog(
-                            cubit: cubit,
-                            options: [
-                              (DateOption.noDate, context.l10n.noDate),
-                              (DateOption.today, context.l10n.today),
-                            ],
-                          ),
+                        onTapped: () => cubit.onDatePickerTapped(
+                          isValid: cubit.selectedStartDate != null,
+                          isStart: false,
                         ),
                       ),
                     ),
@@ -161,7 +197,8 @@ class AddEmployeeView extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BottomActions(onSave: () {}),
+      bottomNavigationBar:
+          BottomActions(onSave: () => cubit.saveEmployeeDataToDb(isEdit)),
     );
   }
 }

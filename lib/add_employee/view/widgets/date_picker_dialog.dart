@@ -4,14 +4,17 @@ class DatePickerDialog extends StatelessWidget {
   const DatePickerDialog({
     required this.cubit,
     required this.options,
+    required this.onSaved,
+    required this.isStart,
     super.key,
   });
   final AddEmployeeCubit cubit;
   final List<(DateOption, String)> options;
+  final void Function() onSaved;
+  final bool isStart;
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -44,8 +47,11 @@ class DatePickerDialog extends StatelessWidget {
                       (index) => DateChoice(
                         label: options[index].$2,
                         isSelected: cubit.value == options[index].$1,
-                        onSelected: (val) =>
-                            cubit.onChoiceChipTapped(val, options[index].$1),
+                        onSelected: (val) => cubit.onChoiceChipTapped(
+                          val,
+                          options[index].$1,
+                          isStart,
+                        ),
                       ),
                     ),
                   ),
@@ -60,9 +66,10 @@ class DatePickerDialog extends StatelessWidget {
                     rightChevronIcon:
                         SvgPicture.asset(AppAssets.calendarArrowRight),
                   ),
-                  firstDay: now,
+                  firstDay: isStart
+                      ? DateTime(1950)
+                      : cubit.selectedStartDate!.add(const Duration(days: 1)),
                   lastDay: DateTime(2099),
-                  currentDay: now,
                   focusedDay: cubit.focusedDay,
                   calendarStyle: CalendarStyle(
                     defaultTextStyle: const TextStyle(
@@ -81,9 +88,15 @@ class DatePickerDialog extends StatelessWidget {
                     todayTextStyle: const TextStyle(color: AppColors.mainColor),
                   ),
                   selectedDayPredicate: (day) {
-                    return isSameDay(cubit.selectedDay, day);
+                    if (isStart) {
+                      return isSameDay(cubit.selectedStartDate, day);
+                    } else {
+                      return isSameDay(cubit.selectedEndDate, day);
+                    }
                   },
-                  onDaySelected: cubit.onDaySelected,
+                  onDaySelected: isStart
+                      ? cubit.onStartDateSelected
+                      : cubit.onEndDateSelected,
                   onPageChanged: (focusedDay) {
                     focusedDay = focusedDay;
                   },
@@ -105,11 +118,7 @@ class DatePickerDialog extends StatelessWidget {
                       width: context.screenWidth * 0.03738317757,
                     ),
                     SaveButton(
-                      onPressed: () {
-                        cubit.saveDate(
-                          cubit.startDateController,
-                        );
-                      },
+                      onPressed: onSaved,
                     ),
                     SizedBox(
                       width: context.screenWidth * 0.03738317757,

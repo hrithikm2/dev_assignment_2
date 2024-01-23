@@ -37,6 +37,7 @@ class DefaultTextField extends StatelessWidget {
           ),
           Expanded(
             child: TextFormField(
+              style: const TextStyle(fontSize: 16),
               onTap: onTapped,
               readOnly: readOnly ?? false,
               controller: controller,

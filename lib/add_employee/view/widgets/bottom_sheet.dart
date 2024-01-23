@@ -11,7 +11,16 @@ class BottomSheet extends StatelessWidget {
       shrinkWrap: true,
       itemCount: cubit.roles.length,
       separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) => Center(child: Text(cubit.roles[index])),
+      itemBuilder: (context, index) => InkWell(
+        onTap: () {
+          cubit.roleController.text = cubit.roles[index];
+          context.pop;
+        },
+        child: Container(
+          alignment: Alignment.center,
+          child: Text(cubit.roles[index]),
+        ),
+      ),
     );
   }
 }

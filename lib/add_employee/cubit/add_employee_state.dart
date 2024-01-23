@@ -24,6 +24,19 @@ class DateSelected extends AddEmployeeState {
 }
 
 class AddEmployeeSuccess extends AddEmployeeState {
+  const AddEmployeeSuccess();
+}
+
+class AddEmployeeInvalid extends AddEmployeeState {
+  const AddEmployeeInvalid();
   @override
   List<Object?> get props => [];
+}
+
+class RequestedDatePicker extends AddEmployeeState {
+  const RequestedDatePicker({required this.isValid, required this.isStart});
+  final bool isValid;
+  final bool isStart;
+  @override
+  List<Object> get props => [isValid, isStart];
 }

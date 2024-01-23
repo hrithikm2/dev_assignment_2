@@ -25,6 +25,7 @@ class EmployeeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<EmployeeListCubit>();
     final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.employeeListAppBarTitle)),

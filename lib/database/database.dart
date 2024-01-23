@@ -16,7 +16,7 @@ class SqfliteDatabase {
       onCreate: (db, version) async {
         // ignore: lines_longer_than_80_chars
         await db.execute(
-          'CREATE TABLE Employees (id INTEGER PRIMARY KEY, name TEXT, role TEXT, startTime TEXT,endTime TEXT)',
+          'CREATE TABLE Employees (id INTEGER PRIMARY KEY, name TEXT, role TEXT, startDate TEXT,endDate TEXT, isPrevious INTEGER)',
         );
       },
     );
