@@ -102,7 +102,10 @@ class AddEmployeeView extends StatelessWidget {
               context.l10n.fillAllFieldsAlert,
             );
           } else if (state is AddEmployeeSuccess) {
-            context.read<EmployeeListCubit>().employees.add(cubit.employee);
+            context
+                .read<EmployeeListCubit>()
+                .currentEmployees
+                .add(cubit.employee);
             context.pop;
           }
         },

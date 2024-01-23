@@ -9,9 +9,10 @@ class EmployeeListCubit extends Cubit<EmployeeListState> {
   }
 
   Future<void> getData() async {
-    employees = await SqfliteDatabase.getDataFromDatabase();
-    print(employees.first.name);
+    final allEmployees = await SqfliteDatabase.getDataFromDatabase();
+    allEmployees.where((element) => element.isPrevious == 1);
   }
 
-  List<EmployeeModel> employees = [];
+  List<EmployeeModel> currentEmployees = [];
+  List<EmployeeModel> previousEmployees = [];
 }

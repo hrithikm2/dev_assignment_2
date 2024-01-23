@@ -17,7 +17,6 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     roleController = TextEditingController();
     startDateController = TextEditingController();
     endDateController = TextEditingController();
-
     focusedDay = DateTime.now();
   }
 
@@ -42,27 +41,16 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     'Product Owner',
   ];
 
-  @override
-  Future<void> close() {
-    nameController.dispose();
-    roleController.dispose();
-    startDateController.dispose();
-    endDateController.dispose();
-
-    return super.close();
-  }
-
   bool selectedDatePredicate(DateTime day, DateTime? selectionDate) {
     emit(DateChanged(date: selectionDate));
-    print(isSameDay(selectionDate, day));
     return isSameDay(selectionDate, day);
   }
 
   void onStartDateSelected(DateTime selected, DateTime focused) {
     if (!isSameDay(selectedStartDate, selected)) {
       selectedStartDate = selected;
+      print('focused: $focused,, selectedStart : $selectedStartDate');
       focusedDay = focused.add(const Duration(days: 1));
-      print(focused);
     }
     _formatDate(selectedStartDate);
     selectedEndDate = selectedStartDate;
@@ -83,7 +71,7 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     emit(DateChanged(date: selectedEndDate));
   }
 
-  // ignore: inference_failure_on_function_return_type, always_declare_return_types
+  // ignore: inference_failure_on_function_return_type
   void onChoiceChipTapped(
     bool selected,
     DateOption selectedValue,
@@ -94,12 +82,20 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     switch (selectedValue) {
       case DateOption.today:
         selectedDate = DateTime.now();
+        focusedDay = selectedDate.add(const Duration(days: 1));
+
       case DateOption.nextMonday:
         selectedDate = calculateNextDay(dayCount: 1);
+        focusedDay = selectedDate.add(const Duration(days: 1));
+
       case DateOption.nextTuesday:
         selectedDate = calculateNextDay(dayCount: 2);
+        focusedDay = selectedDate.add(const Duration(days: 1));
+
       case DateOption.afterOneWeek:
-        selectedStartDate = calculateNextDay(dayCount: 7);
+        selectedDate = calculateNextDay(dayCount: 7);
+        focusedDay = selectedDate.add(const Duration(days: 1));
+
       case DateOption.noDate:
         selectedDate = null;
     }
@@ -161,5 +157,15 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
     } else {
       emit(const AddEmployeeInvalid());
     }
+  }
+
+  @override
+  Future<void> close() {
+    nameController.dispose();
+    roleController.dispose();
+    startDateController.dispose();
+    endDateController.dispose();
+
+    return super.close();
   }
 }
