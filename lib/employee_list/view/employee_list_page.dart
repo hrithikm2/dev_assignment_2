@@ -15,10 +15,7 @@ class EmployeeListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => EmployeeListCubit(),
-      child: const EmployeeListView(),
-    );
+    return const EmployeeListView();
   }
 }
 
