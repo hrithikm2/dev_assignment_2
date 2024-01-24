@@ -8,6 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:uuid/uuid.dart';
 
 part 'add_employee_state.dart';
 
@@ -139,11 +140,12 @@ class AddEmployeeCubit extends Cubit<AddEmployeeState> {
         endDateController.text.isNotEmpty &&
         startDateController.text.isNotEmpty) {
       final data = {
+        'id': const Uuid().v4(),
         'name': nameController.text,
         'role': roleController.text,
         'startDate': startDateController.text,
         'endDate': endDateController.text,
-        'isPrevious': selectedEndDate == null ? 1 : 0,
+        'isPrevious': selectedEndDate == null ? 0 : 1,
       };
       employee = EmployeeModel.fromJson(data);
       if (isEdit) {

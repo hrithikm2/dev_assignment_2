@@ -16,7 +16,7 @@ class SqfliteDatabase {
       onCreate: (db, version) async {
         // ignore: lines_longer_than_80_chars
         await db.execute(
-          'CREATE TABLE Employees (id INTEGER PRIMARY KEY, name TEXT, role TEXT, startDate TEXT,endDate TEXT, isPrevious INTEGER)',
+          'CREATE TABLE Employees (id TEXT PRIMARY KEY, name TEXT, role TEXT, startDate TEXT,endDate TEXT, isPrevious INTEGER)',
         );
       },
     );
@@ -36,9 +36,9 @@ class SqfliteDatabase {
     print(result);
   }
 
-  static Future<void> deleteDataFromDatabase(int time) async {
+  static Future<void> deleteDataFromDatabase(String id) async {
     final result =
-        await _db.delete('Employees', where: 'time = ?', whereArgs: [time]);
+        await _db.delete('Employees', where: 'id=?', whereArgs: [id]);
 
     print(result);
   }
