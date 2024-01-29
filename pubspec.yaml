@@ -20,7 +20,7 @@ dependencies:
   gap: ^3.0.1
   google_fonts: ^6.1.0
   intl: ^0.18.0
-  sqflite: ^2.3.0
+  sqflite: ^2.3.2
   table_calendar:
     git:
       url: https://github.com/hrithikm2/table_calendar.git
