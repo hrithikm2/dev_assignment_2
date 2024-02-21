@@ -16,7 +16,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_slidable: ^3.0.1
-  flutter_svg: ^2.0.9
+  flutter_svg: ^2.0.10+1
   gap: ^3.0.1
   google_fonts: ^6.1.0
   intl: ^0.18.0
